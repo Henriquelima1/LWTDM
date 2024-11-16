@@ -392,8 +392,8 @@ if __name__ == '__main__':
     cdcr = CDCRB(config['model']['args']['encoder_spec'])
     from thop import profile
     from thop import clever_format
-    x = torch.randn(1,3,28,28)
-    coord = make_coord([224, 224]).unsqueeze(0)
+    x = torch.randn(1,3,512,256)
+    coord = make_coord([2048, 1024]).unsqueeze(0)
     cell = torch.ones_like(coord)
     cell[:, 0] *= 2 / coord.shape[-2]
     cell[:, 1] *= 2 / coord.shape[-1]

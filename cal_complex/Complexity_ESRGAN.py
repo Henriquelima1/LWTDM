@@ -188,7 +188,7 @@ class RRDBNet(nn.Module):
 if __name__ == '__main__':
     from thop import profile
     from thop import clever_format
-    x = torch.randn(1,3,28,28)
+    x = torch.randn(1,3,512,256)
 
     rrdb = RRDBNet(3, 3)
     flops, params = profile(rrdb, inputs=x)

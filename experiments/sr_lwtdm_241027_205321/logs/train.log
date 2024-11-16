@@ -1,0 +1,91 @@
+24-10-27 20:53:21.550 - INFO:   name: sr_lwtdm
+  phase: train
+  gpu_ids: [0]
+  path:[
+    log: experiments/sr_lwtdm_241027_205321/logs
+    tb_logger: experiments/sr_lwtdm_241027_205321/tb_logger
+    results: experiments/sr_lwtdm_241027_205321/results
+    checkpoint: experiments/sr_lwtdm_241027_205321/checkpoint
+    resume_state: None
+    experiments_root: experiments/sr_lwtdm_241027_205321
+  ]
+  datasets:[
+    train:[
+      name: AID
+      mode: HR
+      dataroot: ../path/to/datasetOmniD_256_1024/hr_1024
+      datatype: img
+      l_resolution: 256
+      r_resolution: 1024
+      batch_size: 24
+      num_workers: 12
+      use_shuffle: True
+      data_len: -1
+    ]
+    val:[
+      name: RSSCN7
+      mode: LRHR
+      dataroot: dataset/RSSCN7val_28_224
+      datatype: img
+      l_resolution: 256
+      r_resolution: 1024
+      data_len: 3
+    ]
+  ]
+  model:[
+    which_model_G: lwtdm
+    finetune_norm: False
+    enet:[
+      in_channel: 3
+      out_channel: 3
+      inner_channel: 32
+      channel_multiplier: [12, 12]
+      attn_res: 2
+      res_blocks: 2
+      dropout: 0.1
+    ]
+    beta_schedule:[
+      train:[
+        schedule: linear
+        n_timestep: 2000
+        linear_start: 0.0005
+        linear_end: 0.02
+      ]
+      val:[
+        schedule: linear
+        n_timestep: 2000
+        linear_start: 0.0005
+        linear_end: 0.02
+        sampling_timesteps: 2000
+        ddim_sampling_eta: 0.0
+      ]
+    ]
+    diffusion:[
+      image_size: 224
+      channels: 3
+      conditional: True
+    ]
+  ]
+  train:[
+    n_iter: 2000000
+    val_freq: 100000.0
+    save_checkpoint_freq: 100000.0
+    print_freq: 200
+    optimizer:[
+      type: adam
+      lr: 0.0001
+    ]
+    ema_scheduler:[
+      step_start_ema: 5000
+      update_ema_every: 1
+      ema_decay: 0.9999
+    ]
+  ]
+  wandb:[
+    project: sr_lwtdm
+  ]
+  distributed: False
+  log_wandb_ckpt: False
+  log_eval: False
+  enable_wandb: False
+

@@ -16,10 +16,11 @@
         "train": {
             "name": "AID",
             "mode": "HR",
-            "dataroot": "dataset/AID_28_224",
+            //"dataroot": "dataset/AID_28_224",
+            "dataroot": "path/to/datasetOmniD_256_1024",
             "datatype": "img",
-            "l_resolution": 28,
-            "r_resolution": 224,
+            "l_resolution": 256,
+            "r_resolution": 1024,
             "batch_size": 16,
             "num_workers": 8,
             "use_shuffle": true,
@@ -28,10 +29,11 @@
         "val": {
             "name": "RSSCN7",
             "mode": "LRHR",
-            "dataroot": "dataset/RSSCN7val_28_224",
+            //"dataroot": "dataset/RSSCN7val_28_224",
+            "dataroot": "path/to/datasetOmniD_256_1024",
             "datatype": "img",
-            "l_resolution": 28,
-            "r_resolution": 224,
+            "l_resolution": 256,
+            "r_resolution": 1024,
             "data_len": 3
         }
     },

@@ -165,12 +165,12 @@ class UNet(nn.Module):
         out_channel=3,
         inner_channel=32,
         norm_groups=32,
-        channel_mults=(1, 2, 4, 8, 8),
+        channel_mults=(1, 2, 4, 4, 4),
         attn_res=(8),
         res_blocks=3,
         dropout=0,
         with_noise_level_emb=True,
-        image_size=128
+        image_size=(512, 256)
     ):
         super().__init__()
 
@@ -268,13 +268,13 @@ if __name__ == '__main__':
         out_channel=3,
         norm_groups=32,
         inner_channel=64,                # 64 or 128
-        channel_mults=[1,2,4,8,8],       # [1,1] or [2,2] or [1] or [2]
-        attn_res=[28],                   # 6 or 8
+        channel_mults=[1,2,4,4,4],       # [1,1] or [2,2] or [1] or [2]
+        attn_res=[64],                   # 6 or 8
         res_blocks=2,
         dropout=0.2,
-        image_size=224
+        image_size=512 #pode dar erro aqui, cuidado
     )
-    x = torch.randn(1,6,224,224)
+    x = torch.randn(1,6,2048,1024)
     # xe = torch.randn(1,3,28,28)
     t = torch.tensor([1493])
     # out = unet(x, xe, t)

@@ -392,7 +392,7 @@ class RRDBNet(nn.Module):
         #### upsampling
         self.upconv1 = nn.Conv2d(nf, nf, 3, 1, 1, bias=True)
         self.upconv2 = nn.Conv2d(nf, nf, 3, 1, 1, bias=True)
-        if hparams['sr_scale'] == 8:
+        if hparams['sr_scale'] == 4:
             self.upconv3 = nn.Conv2d(nf, nf, 3, 1, 1, bias=True)
         self.HRconv = nn.Conv2d(nf, nf, 3, 1, 1, bias=True)
         self.conv_last = nn.Conv2d(nf, out_nc, 3, 1, 1, bias=True)
@@ -412,7 +412,7 @@ class RRDBNet(nn.Module):
 
         fea = self.lrelu(self.upconv1(F.interpolate(fea, scale_factor=2, mode='nearest')))
         fea = self.lrelu(self.upconv2(F.interpolate(fea, scale_factor=2, mode='nearest')))
-        if hparams['sr_scale'] == 8:
+        if hparams['sr_scale'] == 4:
             fea = self.lrelu(self.upconv3(F.interpolate(fea, scale_factor=2, mode='nearest')))
         fea_hr = self.HRconv(fea)
         out = self.conv_last(self.lrelu(fea_hr))
@@ -425,7 +425,7 @@ class RRDBNet(nn.Module):
 
 
 class Unet(nn.Module):
-    def __init__(self, dim, out_dim=None, dim_mults=(1, 2, 4, 8), cond_dim=32):
+    def __init__(self, dim, out_dim=None, dim_mults=(1, 2, 4, 4), cond_dim=32):
         super().__init__()
         dims = [3, *map(lambda m: dim * m, dim_mults)]
         in_out = list(zip(dims[:-1], dims[1:]))
@@ -533,7 +533,7 @@ class Unet(nn.Module):
 if __name__ == '__main__':
     global hparams
     hparams = {}
-    hparams['sr_scale'] = 8
+    hparams['sr_scale'] = 4
     hparams['use_attn'] = False
     hparams['res'] = True
     hparams['up_input'] = False
@@ -547,13 +547,13 @@ if __name__ == '__main__':
     denoise_fn = Unet(
         hidden_size, out_dim=3, cond_dim=64, dim_mults=dim_mults)
 
-    x = torch.randn(1, 3, 224, 224)
-    img_lr_up = torch.randn(1, 3, 224, 224)
+    x = torch.randn(1, 3, 2048, 1024)
+    img_lr_up = torch.randn(1, 3, 2048, 1024)
     time = torch.tensor([99])
 
     cond = []
     for _ in range(18):
-        cond.append(torch.randn(1, 64, 28, 28))
+        cond.append(torch.randn(1, 64, 512, 256))
 
     from thop import profile
     from thop import clever_format
